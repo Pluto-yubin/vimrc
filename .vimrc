@@ -97,3 +97,14 @@ nnoremap <leader>4 :b4<CR>
 nnoremap <leader>5 :b5<CR>
 nnoremap <leader>6 :b6<CR>
 nnoremap <leader>7 :b7<CR>
+
+" 定义跳出括号函数，用于跳出括号
+func SkipPair()
+    if getline('.')[col('.') - 1] == ')' || getline('.')[col('.') - 1] == ']' || getline('.')[col('.') - 1] == '"' || getline('.')[col('.') - 1] == "'" || getline('.')[col('.') - 1] == '}'
+        return "\<ESC>la"
+    else
+        return "\t"
+    endif
+endfunc
+" 将tab键绑定为跳出括号
+:inoremap <TAB> <c-r>=SkipPair()<CR>
