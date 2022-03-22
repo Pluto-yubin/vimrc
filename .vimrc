@@ -9,7 +9,41 @@
 " is present. But we're including it here just in case this config file is
 " loaded some other way (e.g. saved as `foo`, and then Vim started with
 " `vim -u foo`).
+
+
+" Information from vim-plug
+" Plugins will be downloaded under the specified directory.
+call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
+
+" Declare the list of plugins.
+Plug 'tpope/vim-sensible'
+Plug 'junegunn/seoul256.vim'
+Plug 'preservim/nerdtree'
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()
+
+
+
+"分割线-----------------------------分割线
 set nocompatible
+
+set tabstop=4
+" Effective tab while editing
+set softtabstop=4
+" Tabs are space
+set expandtab
+
+" Cursor line highlight
+set cursorline
+
+set wildmenu
+set wildmode=longest,list,full
+
+set incsearch
+set hlsearch
+
 
 " Turn on syntax highlighting.
 syntax on
@@ -19,15 +53,6 @@ set shortmess+=I
 
 " Show line numbers.
 set number
-
-set tabstop=4
-set softtabstop=4
-set expandtab
-
-set cursorline
-
-set wildmenu
-set wildmode=longest,list,full
 
 " This enables relative line numbering mode. With both number and
 " relativenumber enabled, the current line shows the true line number, while
@@ -89,22 +114,8 @@ inoremap <Up>    <ESC>:echoe "Use k"<CR>
 inoremap <Down>  <ESC>:echoe "Use j"<CR>
 
 let mapleader=" "
-" delete all the space at all the lines tail of this file
-nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
-nnoremap <leader>1 :b1<CR>
-nnoremap <leader>2 :b2<CR>
-nnoremap <leader>4 :b4<CR>
-nnoremap <leader>5 :b5<CR>
-nnoremap <leader>6 :b6<CR>
-nnoremap <leader>7 :b7<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+nnoremap <leader>1 :1b<CR>
+nnoremap <leader>2 :2b<CR>
+nnoremap <leader>3 :3b<CR>
 
-" 定义跳出括号函数，用于跳出括号
-func SkipPair()
-    if getline('.')[col('.') - 1] == ')' || getline('.')[col('.') - 1] == ']' || getline('.')[col('.') - 1] == '"' || getline('.')[col('.') - 1] == "'" || getline('.')[col('.') - 1] == '}'
-        return "\<ESC>la"
-    else
-        return "\t"
-    endif
-endfunc
-" 将tab键绑定为跳出括号
-:inoremap <TAB> <c-r>=SkipPair()<CR>
