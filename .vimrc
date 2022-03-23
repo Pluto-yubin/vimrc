@@ -10,6 +10,19 @@
 " loaded some other way (e.g. saved as `foo`, and then Vim started with
 " `vim -u foo`).
 
+" 有几个很坑的地方
+"   在wsl里面字体要按CTRL-shift-','在setting.json里面来设置,
+"   这样才能让vim-devicons有效
+"   vim-gutetags要和ctags一起装才能用
+"   ctags不仅要装vim插件, 还要在终端装: sudo apt install ctags
+"   装完以后要在文件夹内执行: ctags -R * 才能生产tag文件，之后vim-gutetags和leaderf才有用
+"   vim-airline要在安装vim-fugitive后才能显示分支名称
+"   git-nerdtree目前没用，已提issue
+"   YouCompleteMe要下载以下这些东西
+"   sudo apt-get install build-essential cmake python-dev python3-dev
+"   之后要去~/.vim/plugged/YouCompleteMe这个目录执行:
+"   ./install.py --clang-completer
+"   上面的--clang-completer可以改成--all, 这样这个插件就可以在所有语言上补齐了
 
 " Information from vim-plug
 " Plugins will be downloaded under the specified directory.
@@ -18,24 +31,55 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 " Declare the list of plugins.
 Plug 'tpope/vim-sensible'
 Plug 'junegunn/seoul256.vim'
+Plug 'easymotion/vim-easymotion'
+Plug 'ludovicchabant/vim-gutentags/'
 " 延迟按需加载，使用到命令的时候再加载或者打开对应文件类型才加载
+
+Plug 'universal-ctags/ctags'
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-Plug 'preservim/nerdtree'   
+Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-" List ends here. Plugins become visible to Vim after this call.
+Plug 'tpope/vim-fugitive'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'dense-analysis/ale'
+Plug 'liuchengxu/space-vim-dark'
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'ycm-core/YouCompleteMe'
+Plug 'jiangmiao/auto-pairs'
+Plug 'frazrepo/vim-rainbow'
+Plug 'Yggdroot/indentLine'
 call plug#end()
 
+" 自动打开 quickfix window ，高度为 6
+let g:asyncrun_open = 6
 
+" 任务结束时候响铃提醒
+let g:asyncrun_bell = 1
+" List ends here. Plugins become visible to Vim after this call.
+
+"自动保存
+let autosave=5
 "分割线-----------------------------分割线
 set tabstop=4
 " Effective tab while editing
 set softtabstop=4
 " Tabs are space
+set expandtab
+
+" 关闭高亮
+set nohlsearch
+
+filetype plugin indent on
+" show existing tab with 4 spaces width
+set tabstop=4
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
 set expandtab
 
 " Cursor line highlight
@@ -47,6 +91,9 @@ set wildmode=longest,list,full
 set incsearch
 set hlsearch
 set encoding=UTF-8
+
+" 设置字体
+set guifont=Andale\ Mono\ 10
 
 " Turn on syntax highlighting.
 syntax on
@@ -96,6 +143,11 @@ nmap Q <Nop> " 'Q' in normal mode enters Ex mode. You almost never want this.
 " Disable audible bell because it's annoying.
 set noerrorbells visualbell t_vb=
 
+set splitbelow
+set splitright
+" set the color of comment
+hi comment ctermfg=59
+
 " Enable mouse support. You should avoid relying on this too much, but it can
 " sometimes be convenient.
 set mouse+=a
@@ -118,18 +170,29 @@ inoremap <Down>  <ESC>:echoe "Use j"<CR>
 
 let mapleader=" "
 nnoremap <leader>sv :source $MYVIMRC<CR>
-nnoremap <leader>1 :1b<CR>
-nnoremap <leader>2 :2b<CR>
-nnoremap <leader>3 :3b<CR>
-
-
+nnoremap noh       :noh<CR>
+nnoremap ter       :ter<CR>
+nnoremap 5ter      :ter ++rows=5<CR>
 " Configuration of NERDTree
 nnoremap <C-n>  :NERDTree<CR>
 nnoremap <C-t>  :NERDTreeToggle<CR>
 nnoremap <C-f>  :NERDTreeFind<CR>
+nnoremap sovim  :so ~/.vimrc<CR>:noh<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
+" 定义跳出括号函数，用于跳出括号
+func SkipPair()
+    if getline('.')[col('.') - 1] == ')' || getline('.')[col('.') - 1] == ']' || getline('.')[col('.') - 1] == '"' || getline('.')[col('.') - 1] == "'" || getline('.')[col('.') - 1] == '}'
+        return "\<ESC>la"
+    else
+        return "\t"
+    endif
+endfunc
+inoremap <C-e> <C-o>A
+" 将tab键绑定为跳出括号
+:inoremap <TAB> <c-r>=SkipPair()<CR>
 " git-NerdTree
+hi Directory guifg=#FF0000 ctermfg=white
 let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Modified'  :'✹',
                 \ 'Staged'    :'✚',
@@ -146,6 +209,10 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 
 " vim-nerdtree-syntax-highlight setting
 " you can add these colors to your .vimrc to help customizing
+
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
 let s:brown = "905532"
 let s:aqua =  "3AFFDB"
 let s:blue = "689FB6"
@@ -177,3 +244,146 @@ let g:NERDTreePatternMatchHighlightColor['.*_spec\.rb$'] = s:rspec_red " sets th
 let g:WebDevIconsDefaultFolderSymbolColor = s:beige " sets the color for folders that did not match any rule
 let g:WebDevIconsDefaultFileSymbolColor = s:blue " sets the color for files that did not match any rule
 "分割线-------------------
+
+
+"ctags setting
+set tags=./.tags;,.tags
+
+
+"airline setting
+let g:airline#extensions#tabline#enabled = 1
+
+"vim-gutentags setting
+" gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
+let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
+let g:gutentags_enabled = 1
+" 所生成的数据文件的名称
+let g:gutentags_ctags_tagfile = '.tags'
+if !executable('ctags')
+    let g:gutentags_dont_load = 1
+endif
+" 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
+let s:vim_tags = expand('~/.cache/tags')
+let g:gutentags_cache_dir = s:vim_tags
+
+" 配置 ctags 的参数
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
+let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+
+" 检测 ~/.cache/tags 不存在就新建
+if !isdirectory(s:vim_tags)
+   silent! call mkdir(s:vim_tags, 'p')
+endif
+
+"space-vim-dark setting
+colorscheme space-vim-dark
+set termguicolors
+hi Comment guifg=#5C6370 ctermfg=59
+hi Normal     ctermbg=NONE guibg=NONE
+hi LineNr     ctermbg=NONE guibg=NONE
+hi SignColumn ctermbg=NONE guibg=NONE
+
+"ale setting
+let g:ale_sign_column_always = 1
+let g:ale_linters_explicit = 1
+let g:ale_completion_delay = 500
+let g:ale_echo_delay = 20
+let g:ale_lint_delay = 500
+let g:ale_echo_msg_format = '[%linter%] %code: %%s'
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+let g:airline#extensions#ale#enabled = 1
+let g:ale_sign_error = '✘'                          "错误提示符。
+let g:ale_sign_warning = '!'                        "警告提示符。
+let g:ale_echo_msg_error_str = 'E'                  "错误提示符。
+let g:ale_echo_msg_warning_str = 'W'                "警告提示符。
+let g:ale_c_gcc_options = '-Wall -O2 -std=c99'
+let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
+let g:ale_c_cppcheck_options = ''
+let g:ale_cpp_cppcheck_options = ''
+let g:ale_sign_error = "\ue009\ue009"
+
+let g:ale_linters = {
+\   'c': ['clangd'],
+\   'c++': ['clangd']
+\}
+
+" In ~/.vim/vimrc, or somewhere similar.
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'javascript': ['eslint'],
+\}
+
+" Set this variable to 1 to fix files when you save them.
+let g:ale_fix_on_save = 1
+
+nmap <silent> <C-j> <Plug>(ale_previous_wrap)
+nmap <silent> <C-k> <Plug>(ale_next_wrap)
+
+
+" leaderf setting
+let g:Lf_ShortcutF = '<c-p>'
+let g:Lf_ShortcutB = '<m-n>'
+noremap <leader>n :LeaderfMru<cr>
+noremap <leader>f :LeaderfFunction!<cr>
+noremap <leader>b :LeaderfBuffer<cr>
+noremap <leader>t :LeaderfTag<cr>
+let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
+
+let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
+let g:Lf_WorkingDirectoryMode = 'Ac'
+let g:Lf_WindowHeight = 0.30
+let g:Lf_CacheDirectory = expand('~/.vim/cache')
+let g:Lf_ShowRelativePath = 0
+let g:Lf_HideHelp = 1
+let g:Lf_StlColorscheme = 'powerline'
+let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
+
+"cpp hightlight setting
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 1
+let g:cpp_experimental_template_highlight = 1
+
+"youCompleteMe setting
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_server_log_level = 'info'
+let g:ycm_min_num_identifier_candidate_chars = 2
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_complete_in_strings=1
+let g:ycm_key_invoke_completion = '<c-z>'
+set completeopt=menu,menuone
+
+noremap <c-z> <NOP>
+
+let g:ycm_semantic_triggers =  {
+           \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+           \ 'cs,lua,javascript': ['re!\w{2}'],
+           \ }
+highlight PMenu ctermfg=0 ctermbg=242 guifg=black guibg=darkgrey
+highlight PMenuSel ctermfg=242 ctermbg=8 guifg=darkgrey guibg=black
+let g:ycm_filetype_whitelist = {
+			\ "c":1,
+			\ "cpp":1,
+			\ "objc":1,
+			\ "sh":1,
+			\ "zsh":1,
+			\ "zimbu":1,
+			\ }
+" vim-rainbow setting
+let g:rainbow_active = 1
+
+let g:rainbow_load_separately = [
+    \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+    \ [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
+    \ [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+    \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
+    \ ]
+
+let g:rainbow_guifgs = ['RoyalBlue3', 'DarkOrange3', 'DarkOrchid3', 'FireBrick']
+let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
+
+let g:indentLine_char = ''
