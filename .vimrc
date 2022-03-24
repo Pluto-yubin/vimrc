@@ -173,6 +173,10 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 nnoremap noh       :noh<CR>
 nnoremap ter       :ter<CR>
 nnoremap 5ter      :ter ++rows=5<CR>
+nnoremap <leader>h <C-w>h
+nnoremap <leader>l <C-w>l
+nnoremap <leader>j <C-w>j
+nnoremap <leader>k <C-w>k
 " Configuration of NERDTree
 nnoremap <C-n>  :NERDTree<CR>
 nnoremap <C-t>  :NERDTreeToggle<CR>
@@ -205,6 +209,7 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Clean'     :'✔︎',
                 \ 'Unknown'   :'?',
                 \ }
+let g:NERDTreeGitStatusConcealBrackets = 1 " default: 0
 "分割线--------------------------------------------
 
 " vim-nerdtree-syntax-highlight setting
