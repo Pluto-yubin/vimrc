@@ -26,6 +26,9 @@
 "   增加python补全工具jedi
 "   要先通过sudo pip install jedi 下载
 "   jedi已经死了
+"   python在vim里面已经死了
+"   目前应该主要只会用来写c/cpp/golang了
+"   python折磨死我了
 
 " Information from vim-plug
 " Plugins will be downloaded under the specified directory.
@@ -190,16 +193,8 @@ nnoremap sovim  :so ~/.vimrc<CR>:noh<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
 " 定义跳出括号函数，用于跳出括号
-func SkipPair()
-    if getline('.')[col('.') - 1] == ')' || getline('.')[col('.') - 1] == ']' || getline('.')[col('.') - 1] == '"' || getline('.')[col('.') - 1] == "'" || getline('.')[col('.') - 1] == '}'
-        return "\<ESC>la"
-    else
-        return "\t"
-    endif
-endfunc
 inoremap <C-e> <C-o>A
 " 将tab键绑定为跳出括号
-:inoremap <TAB> <c-r>=SkipPair()<CR>
 " git-NerdTree
 hi Directory guifg=#FF0000 ctermfg=white
 let g:NERDTreeGitStatusIndicatorMapCustom = {
@@ -317,7 +312,8 @@ let g:ale_sign_error = "\ue009\ue009"
 let g:ale_linters = {
 \   'c': ['clangd'],
 \   'c++': ['clangd'],
-\   'go' : ['gopls']
+\   'go' : ['gopls'],
+\   'py' : ['flake8']
 \}
 
 " In ~/.vim/vimrc, or somewhere similar.
@@ -410,5 +406,23 @@ let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
 
 let g:indentLine_char = ''
 
-"jedi-vim setting
-let g:jedi#environment_path = "/usr/bin/python3.8"
+" python mode setting
+filetype plugin indent on
+let g:pymode_python = 'python3'
+let g:pymode_options_colorcolumn = 1
+let g:pymode_indent = 1
+let g:pymode_indent = 1
+let g:pymode_doc_bind = 'K'
+let g:pymode_breakpoint_bind = '<leader>db'
+set completeopt=menuone,noinsert
+let g:pymode_rope = 0
+
+"Pydiction setting
+" let g:pydiction_location = '~/.vim/plugged/pydiction/complete-dict'
+" let g:pydiction_menu_height = 3
+"
+" vim-go setting
+let g:syntastic_go_checkers = ['go', 'golint', 'govet', 'errcheck']
+let g:go_fmt_command = "goimports"
+let g:go_metalinter_autosave = 1
+let g:go_metalinter_autosave_enabled = ['vet', 'golint']
