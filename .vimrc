@@ -23,6 +23,9 @@
 "   之后要去~/.vim/plugged/YouCompleteMe这个目录执行:
 "   ./install.py --clang-completer
 "   上面的--clang-completer可以改成--all, 这样这个插件就可以在所有语言上补齐了
+"   增加python补全工具jedi
+"   要先通过sudo pip install jedi 下载
+"   jedi已经死了
 
 " Information from vim-plug
 " Plugins will be downloaded under the specified directory.
@@ -53,6 +56,8 @@ Plug 'ycm-core/YouCompleteMe'
 Plug 'jiangmiao/auto-pairs'
 Plug 'frazrepo/vim-rainbow'
 Plug 'Yggdroot/indentLine'
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 " 自动打开 quickfix window ，高度为 6
@@ -311,7 +316,8 @@ let g:ale_sign_error = "\ue009\ue009"
 
 let g:ale_linters = {
 \   'c': ['clangd'],
-\   'c++': ['clangd']
+\   'c++': ['clangd'],
+\   'go' : ['gopls']
 \}
 
 " In ~/.vim/vimrc, or somewhere similar.
@@ -377,7 +383,18 @@ let g:ycm_filetype_whitelist = {
 			\ "sh":1,
 			\ "zsh":1,
 			\ "zimbu":1,
+               \ "py":1,
 			\ }
+
+" let g:ycm_python_interpreter_path = 'usr/bin/python3.8'
+" let g:ycm_python_sys_path = ['usr/lib/python3.8','usr/lib/python3.8/lib_dynload','usr/lib/python3/dist-packages']
+
+" let g:ycm_extra_conf_vim_data = [
+"   \  'g:ycm_python_interpreter_path',
+"   \  'g:ycm_python_sys_path'
+"   \]
+" let g:ycm_global_ycm_extra_conf = '~/global_extra_conf.py'
+
 " vim-rainbow setting
 let g:rainbow_active = 1
 
@@ -392,3 +409,6 @@ let g:rainbow_guifgs = ['RoyalBlue3', 'DarkOrange3', 'DarkOrchid3', 'FireBrick']
 let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
 
 let g:indentLine_char = ''
+
+"jedi-vim setting
+let g:jedi#environment_path = "/usr/bin/python3.8"
