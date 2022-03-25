@@ -61,6 +61,7 @@ Plug 'frazrepo/vim-rainbow'
 Plug 'Yggdroot/indentLine'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
 call plug#end()
 
 " 自动打开 quickfix window ，高度为 6
@@ -380,6 +381,7 @@ let g:ycm_filetype_whitelist = {
 			\ "zsh":1,
 			\ "zimbu":1,
                \ "py":1,
+               \ "golang":1,
 			\ }
 
 " let g:ycm_python_interpreter_path = 'usr/bin/python3.8'
@@ -426,3 +428,6 @@ let g:syntastic_go_checkers = ['go', 'golint', 'govet', 'errcheck']
 let g:go_fmt_command = "goimports"
 let g:go_metalinter_autosave = 1
 let g:go_metalinter_autosave_enabled = ['vet', 'golint']
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+au filetype go inoremap <buffer> . .<C-x><C-o>
