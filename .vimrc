@@ -381,17 +381,17 @@ let g:ycm_filetype_whitelist = {
 			\ "zsh":1,
 			\ "zimbu":1,
                \ "py":1,
-               \ "golang":1,
+               \ "go":1,
 			\ }
 
-" let g:ycm_python_interpreter_path = 'usr/bin/python3.8'
-" let g:ycm_python_sys_path = ['usr/lib/python3.8','usr/lib/python3.8/lib_dynload','usr/lib/python3/dist-packages']
+ let g:ycm_python_interpreter_path = 'usr/bin/python3.8'
+ let g:ycm_python_sys_path = ['usr/lib/python3.8','usr/lib/python3.8/lib_dynload','usr/lib/python3/dist-packages']
 
-" let g:ycm_extra_conf_vim_data = [
-"   \  'g:ycm_python_interpreter_path',
-"   \  'g:ycm_python_sys_path'
-"   \]
-" let g:ycm_global_ycm_extra_conf = '~/global_extra_conf.py'
+ let g:ycm_extra_conf_vim_data = [
+   \  'g:ycm_python_interpreter_path',
+   \  'g:ycm_python_sys_path'
+   \]
+ let g:ycm_global_ycm_extra_conf = '~/global_extra_conf.py'
 
 " vim-rainbow setting
 let g:rainbow_active = 1
