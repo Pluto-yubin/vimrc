@@ -432,3 +432,17 @@ let g:go_metalinter_autosave_enabled = ['vet', 'golint']
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 au filetype go inoremap <buffer> . .<C-x><C-o>
+let g:go_debug_windows = {
+      \ 'vars':       'rightbelow 60vnew',
+      \ 'stack':      'rightbelow 10new',
+      \ 'GODEBUG_OUTPUT':     'rightbelow 10new',
+\ }
+let g:go_debug_mappings = {
+      \ '(go-debug-continue)': {'key': 'c', 'arguments': '<nowait>'},
+      \ '(go-debug-next)': {'key': 'n', 'arguments': '<nowait>'},
+      \ '(go-debug-step)': {'key': 's'},
+      \ '(go-debug-print)': {'key': 'p'},
+  \}
+nnoremap gds :GoDebugStart<cr>
+nnoremap gdt :GoDebugStop<cr>
+nnoremap gdb :GoDebugBreakpoint<cr>
