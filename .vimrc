@@ -29,6 +29,7 @@
 "   python在vim里面已经死了
 "   目前应该主要只会用来写c/cpp/golang了
 "   python折磨死我了
+"   golang在ycm里编译时要加上--go-completer, 可以和clangd的一起加
 
 " Information from vim-plug
 " Plugins will be downloaded under the specified directory.
@@ -39,8 +40,6 @@ Plug 'tpope/vim-sensible'
 Plug 'junegunn/seoul256.vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'ludovicchabant/vim-gutentags/'
-" 延迟按需加载，使用到命令的时候再加载或者打开对应文件类型才加载
-
 Plug 'universal-ctags/ctags'
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
@@ -61,6 +60,8 @@ Plug 'frazrepo/vim-rainbow'
 Plug 'Yggdroot/indentLine'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'terryma/vim-multiple-cursors'
+
 
 call plug#end()
 
@@ -71,6 +72,7 @@ let g:asyncrun_open = 6
 let g:asyncrun_bell = 1
 " List ends here. Plugins become visible to Vim after this call.
 
+nnoremap v <c-v>
 "自动保存
 let autosave=5
 "分割线-----------------------------分割线
@@ -187,14 +189,13 @@ nnoremap <leader>l <C-w>l
 nnoremap <leader>j <C-w>j
 nnoremap <leader>k <C-w>k
 " Configuration of NERDTree
-nnoremap <C-n>  :NERDTree<CR>
-nnoremap <C-t>  :NERDTreeToggle<CR>
+nnoremap <C-t>  :NERDTree<CR>
 nnoremap <C-f>  :NERDTreeFind<CR>
 nnoremap sovim  :so ~/.vimrc<CR>:noh<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
 " 定义跳出括号函数，用于跳出括号
-inoremap <C-e> <C-o>A
+inoremap <C-a> <C-[>A
 " 将tab键绑定为跳出括号
 " git-NerdTree
 hi Directory guifg=#FF0000 ctermfg=white
