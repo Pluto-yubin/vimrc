@@ -65,11 +65,6 @@ Plug 'terryma/vim-multiple-cursors'
 
 call plug#end()
 
-" 自动打开 quickfix window ，高度为 6
-let g:asyncrun_open = 6
-
-" 任务结束时候响铃提醒
-let g:asyncrun_bell = 1
 " List ends here. Plugins become visible to Vim after this call.
 
 nnoremap v <c-v>
@@ -446,3 +441,22 @@ let g:go_debug_mappings = {
 nnoremap gds :GoDebugStart<cr>
 nnoremap gdt :GoDebugStop<cr>
 nnoremap gdb :GoDebugBreakpoint<cr>
+
+"asyncrun setting
+" 自动打开 quickfix window ，高度为 6
+let g:asyncrun_open = 6
+
+" 任务结束时候响铃提醒
+let g:asyncrun_bell = 1
+" 定义 F9 为编译单文件
+nnoremap <silent> <F9> :AsyncRun gcc -Wall -O2 "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
+" F5运行
+nnoremap <silent> <F5> :AsyncRun -raw -cwd=$(VIM_FILEDIR) "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
+
+let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '_darcs', 'build.xml']
+" F7编译整个项目
+nnoremap <silent> <F7> :AsyncRun -cwd=<root> make <cr>
+" F8运行整个项目
+nnoremap <silent> <F8> :AsyncRun -cwd=<root> -raw make run <cr>
+" F4更新cmake
+nnoremap <silent> <F4> :AsyncRun -cwd=<root> cmake . <cr>
