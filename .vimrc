@@ -59,6 +59,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'frazrepo/vim-rainbow'
 Plug 'Yggdroot/indentLine'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+Plug 'cpiger/NeoDebug'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'terryma/vim-multiple-cursors'
 
@@ -106,6 +107,23 @@ syntax on
 
 " Disable the default Vim startup message.
 set shortmess+=I
+
+
+" Set cursor shape and color
+if &term =~ "xterm"
+    " INSERT mode
+    let &t_SI = "\<Esc>[5 q" . "\<Esc>]12;white\x7"
+    " REPLACE mode
+    let &t_SR = "\<Esc>[3 q" . "\<Esc>]12;white\x7"
+    " NORMAL mode
+    let &t_EI = "\<Esc>[1 q" . "\<Esc>]12;white\x7"
+endif
+" 1 -> blinking block  闪烁的方块
+" 2 -> solid block  不闪烁的方块
+" 3 -> blinking underscore  闪烁的下划线
+" 4 -> solid underscore  不闪烁的下划线
+" 5 -> blinking vertical bar  闪烁的竖线
+" 6 -> solid vertical bar  不闪烁的竖线
 
 " Show line numbers.
 set number
@@ -190,7 +208,7 @@ nnoremap sovim  :so ~/.vimrc<CR>:noh<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
 " 定义跳出括号函数，用于跳出括号
-inoremap <C-a> <C-[>A
+inoremap <C-a> <C-[>la
 " 将tab键绑定为跳出括号
 " git-NerdTree
 hi Directory guifg=#FF0000 ctermfg=white
@@ -395,14 +413,14 @@ let g:rainbow_active = 1
 let g:rainbow_load_separately = [
     \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
     \ [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
-    \ [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+    \ [ '*.c' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
     \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
     \ ]
 
 let g:rainbow_guifgs = ['RoyalBlue3', 'DarkOrange3', 'DarkOrchid3', 'FireBrick']
 let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
 
-let g:indentLine_char = ''
+let g:indentLine_char = '¦'
 
 " python mode setting
 filetype plugin indent on
@@ -449,7 +467,7 @@ let g:asyncrun_open = 6
 " 任务结束时候响铃提醒
 let g:asyncrun_bell = 1
 " 定义 F9 为编译单文件
-nnoremap <silent> <F9> :AsyncRun gcc -Wall -O2 "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
+nnoremap <silent> <F9> :AsyncRun gcc -Wall "$(VIM_FILEPATH)" -o "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
 " F5运行
 nnoremap <silent> <F5> :AsyncRun -raw -cwd=$(VIM_FILEDIR) "$(VIM_FILEDIR)/$(VIM_FILENOEXT)" <cr>
 
@@ -460,3 +478,11 @@ nnoremap <silent> <F7> :AsyncRun -cwd=<root> make <cr>
 nnoremap <silent> <F8> :AsyncRun -cwd=<root> -raw make run <cr>
 " F4更新cmake
 nnoremap <silent> <F4> :AsyncRun -cwd=<root> cmake . <cr>
+
+"NeoDebug setting
+let g:neodbg_openbreaks_default    = 1               " Open breakpoints window, Default: 1
+let g:neodbg_openstacks_default    = 0               " Open stackframes window, Default: 0
+let g:neodbg_openthreads_default   = 0               " Open threads window, Default: 0
+let g:neodbg_openlocals_default    = 1               " Open locals window, Default fault: 1
+let g:neodbg_openregisters_default = 0               " Open registers window, Default: 0
+let g:neodbg_console_height        = 15
