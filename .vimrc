@@ -62,7 +62,7 @@ Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'cpiger/NeoDebug'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'terryma/vim-multiple-cursors'
-
+Plug 'vim-autoformat/vim-autoformat'
 
 call plug#end()
 
@@ -79,7 +79,7 @@ set softtabstop=4
 set expandtab
 
 " 关闭高亮
-set nohlsearch
+nnoremap <CR> :noh<CR><CR>
 
 filetype plugin indent on
 " show existing tab with 4 spaces width
@@ -213,17 +213,17 @@ inoremap <C-a> <C-[>la
 " git-NerdTree
 hi Directory guifg=#FF0000 ctermfg=white
 let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  :'✹',
-                \ 'Staged'    :'✚',
-                \ 'Untracked' :'✭',
-                \ 'Renamed'   :'➜',
-                \ 'Unmerged'  :'═',
-                \ 'Deleted'   :'✖',
-                \ 'Dirty'     :'✗',
-                \ 'Ignored'   :'☒',
-                \ 'Clean'     :'✔︎',
-                \ 'Unknown'   :'?',
-                \ }
+            \ 'Modified'  :'✹',
+            \ 'Staged'    :'✚',
+            \ 'Untracked' :'✭',
+            \ 'Renamed'   :'➜',
+            \ 'Unmerged'  :'═',
+            \ 'Deleted'   :'✖',
+            \ 'Dirty'     :'✗',
+            \ 'Ignored'   :'☒',
+            \ 'Clean'     :'✔︎',
+            \ 'Unknown'   :'?',
+            \ }
 let g:NERDTreeGitStatusConcealBrackets = 1 " default: 0
 "分割线--------------------------------------------
 
@@ -293,7 +293,7 @@ let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
 
 " 检测 ~/.cache/tags 不存在就新建
 if !isdirectory(s:vim_tags)
-   silent! call mkdir(s:vim_tags, 'p')
+    silent! call mkdir(s:vim_tags, 'p')
 endif
 
 "space-vim-dark setting
@@ -325,17 +325,17 @@ let g:ale_cpp_cppcheck_options = ''
 let g:ale_sign_error = "\ue009\ue009"
 
 let g:ale_linters = {
-\   'c': ['clangd'],
-\   'c++': ['clangd'],
-\   'go' : ['gopls'],
-\   'py' : ['flake8']
-\}
+            \   'c': ['clangd'],
+            \   'c++': ['clangd'],
+            \   'go' : ['gopls'],
+            \   'py' : ['flake8']
+            \}
 
 " In ~/.vim/vimrc, or somewhere similar.
 let g:ale_fixers = {
-\   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\   'javascript': ['eslint'],
-\}
+            \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+            \   'javascript': ['eslint'],
+            \}
 
 " Set this variable to 1 to fix files when you save them.
 let g:ale_fix_on_save = 1
@@ -382,40 +382,40 @@ set completeopt=menu,menuone
 noremap <c-z> <NOP>
 
 let g:ycm_semantic_triggers =  {
-           \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
-           \ 'cs,lua,javascript': ['re!\w{2}'],
-           \ }
+            \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+            \ 'cs,lua,javascript': ['re!\w{2}'],
+            \ }
 highlight PMenu ctermfg=0 ctermbg=242 guifg=black guibg=darkgrey
 highlight PMenuSel ctermfg=242 ctermbg=8 guifg=darkgrey guibg=black
 let g:ycm_filetype_whitelist = {
-			\ "c":1,
-			\ "cpp":1,
-			\ "objc":1,
-			\ "sh":1,
-			\ "zsh":1,
-			\ "zimbu":1,
-               \ "py":1,
-               \ "go":1,
-			\ }
+            \ "c":1,
+            \ "cpp":1,
+            \ "objc":1,
+            \ "sh":1,
+            \ "zsh":1,
+            \ "zimbu":1,
+            \ "py":1,
+            \ "go":1,
+            \ }
 
- let g:ycm_python_interpreter_path = 'usr/bin/python3.8'
- let g:ycm_python_sys_path = ['usr/lib/python3.8','usr/lib/python3.8/lib_dynload','usr/lib/python3/dist-packages']
+let g:ycm_python_interpreter_path = 'usr/bin/python3.8'
+let g:ycm_python_sys_path = ['usr/lib/python3.8','usr/lib/python3.8/lib_dynload','usr/lib/python3/dist-packages']
 
- let g:ycm_extra_conf_vim_data = [
-   \  'g:ycm_python_interpreter_path',
-   \  'g:ycm_python_sys_path'
-   \]
- let g:ycm_global_ycm_extra_conf = '~/global_extra_conf.py'
+let g:ycm_extra_conf_vim_data = [
+            \  'g:ycm_python_interpreter_path',
+            \  'g:ycm_python_sys_path'
+            \]
+let g:ycm_global_ycm_extra_conf = '~/global_extra_conf.py'
 
 " vim-rainbow setting
 let g:rainbow_active = 1
 
 let g:rainbow_load_separately = [
-    \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
-    \ [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
-    \ [ '*.c' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
-    \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
-    \ ]
+            \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+            \ [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
+            \ [ '*.c' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+            \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
+            \ ]
 
 let g:rainbow_guifgs = ['RoyalBlue3', 'DarkOrange3', 'DarkOrchid3', 'FireBrick']
 let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
@@ -446,16 +446,16 @@ let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 au filetype go inoremap <buffer> . .<C-x><C-o>
 let g:go_debug_windows = {
-      \ 'vars':       'rightbelow 60vnew',
-      \ 'stack':      'rightbelow 10new',
-      \ 'GODEBUG_OUTPUT':     'rightbelow 10new',
-\ }
+            \ 'vars':       'rightbelow 60vnew',
+            \ 'stack':      'rightbelow 10new',
+            \ 'GODEBUG_OUTPUT':     'rightbelow 10new',
+            \ }
 let g:go_debug_mappings = {
-      \ '(go-debug-continue)': {'key': 'c', 'arguments': '<nowait>'},
-      \ '(go-debug-next)': {'key': 'n', 'arguments': '<nowait>'},
-      \ '(go-debug-step)': {'key': 's'},
-      \ '(go-debug-print)': {'key': 'p'},
-  \}
+            \ '(go-debug-continue)': {'key': 'c', 'arguments': '<nowait>'},
+            \ '(go-debug-next)': {'key': 'n', 'arguments': '<nowait>'},
+            \ '(go-debug-step)': {'key': 's'},
+            \ '(go-debug-print)': {'key': 'p'},
+            \}
 nnoremap gds :GoDebugStart<cr>
 nnoremap gdt :GoDebugStop<cr>
 nnoremap gdb :GoDebugBreakpoint<cr>
@@ -486,3 +486,7 @@ let g:neodbg_openthreads_default   = 0               " Open threads window, Defa
 let g:neodbg_openlocals_default    = 1               " Open locals window, Default fault: 1
 let g:neodbg_openregisters_default = 0               " Open registers window, Default: 0
 let g:neodbg_console_height        = 15
+
+
+" auto-format setting
+au BufWrite * :Autoformat
