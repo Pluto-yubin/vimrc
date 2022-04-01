@@ -78,6 +78,7 @@ set softtabstop=4
 " Tabs are space
 set expandtab
 
+set t_Co=256
 " 关闭高亮
 nnoremap <CR> :noh<CR><CR>
 
@@ -194,7 +195,6 @@ inoremap <Down>  <ESC>:echoe "Use j"<CR>
 
 let mapleader=" "
 nnoremap <leader>sv :source $MYVIMRC<CR>
-nnoremap noh       :noh<CR>
 nnoremap ter       :ter<CR>
 nnoremap 5ter      :ter ++rows=5<CR>
 nnoremap <leader>h <C-w>h
@@ -204,7 +204,6 @@ nnoremap <leader>k <C-w>k
 " Configuration of NERDTree
 nnoremap <C-t>  :NERDTree<CR>
 nnoremap <C-f>  :NERDTreeFind<CR>
-nnoremap sovim  :so ~/.vimrc<CR>:noh<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
 " 定义跳出括号函数，用于跳出括号
@@ -385,8 +384,8 @@ let g:ycm_semantic_triggers =  {
             \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
             \ 'cs,lua,javascript': ['re!\w{2}'],
             \ }
-highlight PMenu ctermfg=0 ctermbg=242 guifg=black guibg=darkgrey
-highlight PMenuSel ctermfg=242 ctermbg=8 guifg=darkgrey guibg=black
+highlight PMenu ctermfg=0 ctermbg=242 guifg=white guibg=Grey15
+highlight PMenuSel ctermfg=242 ctermbg=0 guifg=darkgrey guibg=black
 let g:ycm_filetype_whitelist = {
             \ "c":1,
             \ "cpp":1,
@@ -490,3 +489,9 @@ let g:neodbg_console_height        = 15
 
 " auto-format setting
 au BufWrite * :Autoformat
+
+"molokia setting
+let g:molokai_original = 1
+
+"termdebug
+let g:termdebug_wide=1
